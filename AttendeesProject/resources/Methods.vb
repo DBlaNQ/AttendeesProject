@@ -30,7 +30,7 @@ Public Class Methods
             'Releasing the resources in sqlConnection and calling the update method
         Finally
             sqlConnection.Dispose()
-            MessageBox.Show("Information added", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Entry added", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         End Try
     End Sub
@@ -142,6 +142,39 @@ Public Class Methods
                 sqlReader.Close()
                 sqlConnection.Close()
                 Return sqlDT
+            Case Else
+                MessageBox.Show("The search results returned 0 matches")
         End Select
+
     End Function
+
+    'Deleting entries from the database
+    Public Sub DeleteEntry(sqlConnection As MySqlConnection, ID As Integer, gridView1 As DataGridView, gridView2 As DataGridView)
+        Try
+            sqlConnection.Open()
+            Dim sqlQuery As String = "DELETE from schoolattendance.attendees WHERE atID=" & ID
+
+            Dim sqlCommand As MySqlCommand = New MySqlCommand(sqlQuery, sqlConnection)
+
+            sqlCommand.ExecuteNonQuery()
+
+            If gridView1.SelectedRows.Count > 0 Then
+                For Each row As DataGridViewRow In gridView1.SelectedRows
+                    gridView1.Rows.Remove(row)
+                Next
+            Else
+                MessageBox.Show("Please select a Row from the full list", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                sqlConnection.Close()
+                Exit Sub
+            End If
+
+
+            sqlConnection.Close()
+            MessageBox.Show("Entry Deleted", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        End Try
+    End Sub
 End Class

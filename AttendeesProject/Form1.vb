@@ -61,7 +61,6 @@ Public Class Form1
                        mNumberBox.Text,
                        cityBox.Text)
         UpdateTable()
-        MessageBox.Show("Information Added!", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
         fNameBox.Text = ""
         lNameBox.Text = ""
         mNumberBox.Text = ""
@@ -72,7 +71,7 @@ Public Class Form1
     'Edit existing info in the database by recieving the ID from DataGridView1 and DataGridView2.
     Private Sub editBtn_Click(sender As Object, e As EventArgs) Handles editBtn.Click
         If selected = False Then
-            MessageBox.Show("Please select a Attendee from the Lists below", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Please select an Attendee from the Lists below", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
         mth.EditInfo(sqlConnection,
@@ -124,5 +123,19 @@ Public Class Form1
         Catch ex As Exception
             MessageBox.Show("Please select the left most cell", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Try
+    End Sub
+
+    Private Sub delBtn_Click(sender As Object, e As EventArgs) Handles delBtn.Click
+        If selected = False Then
+            MessageBox.Show("Please select an Attendee from the Lists below", "Attendees Viewer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Exit Sub
+        End If
+        mth.DeleteEntry(sqlConnection, Convert.ToInt32(id), DataGridView1, DataGridView2)
+        UpdateTable()
+
+        fNameBox.Text = ""
+        lNameBox.Text = ""
+        mNumberBox.Text = ""
+        cityBox.Text = ""
     End Sub
 End Class
